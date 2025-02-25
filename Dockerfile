@@ -42,7 +42,7 @@ RUN python2.7 scons/scons.py install
 ENV MSMS_BIN /usr/local/bin/msms
 ENV APBS_BIN /usr/local/bin/apbs
 ENV MULTIVALUE_BIN /usr/local/share/apbs/tools/bin/multivalue
-ENV PDB2PQR_BIN /root/pdb2pqr/pdb2pqr.py
+ENV PDB2PQR_BIN /install/apbs-pdb2pqr/pdb2pqr/pdb2pqr.py
 
 # DOWNLOAD reduce (for protonation)
 WORKDIR /install
@@ -63,6 +63,12 @@ RUN pip3 install ipython Biopython scikit-learn tensorflow==1.12 networkx open3d
 
 # Clone masif
 WORKDIR /
+
+# prepend /usr/local/bin to PATH
+ENV PATH="/usr/local/bin:$PATH"
+
+# # Copy newer GLIBC from Ubuntu 22.04
+COPY --from=ubuntu:22.04 /lib/x86_64-linux-gnu/libc.so.6 /usr/lib/x86_64-linux-gnu/libc.so.6
 
 # We need to define the command to launch when we are going to run the image.
 # We use the keyword 'CMD' to do that.
